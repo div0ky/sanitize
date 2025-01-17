@@ -13,8 +13,18 @@ npm install @div0ky/sanitize
 ```typescript
 import { sanitize } from '@div0ky/sanitize';
 
-// Sanitize a name
-const name = sanitize.name('john doe');  // Returns: 'John Doe'
+// Sanitize first names
+const firstName1 = sanitize.firstName('mr. john');  // Returns: 'John'
+const firstName2 = sanitize.firstName('bob and jim');  // Returns: 'Bob & Jim'
+
+// Sanitize last names
+const lastName1 = sanitize.lastName('smith jr.');  // Returns: 'Smith'
+const lastName2 = sanitize.lastName('thompson and wilson');  // Returns: 'Thompson & Wilson'
+
+// Sanitize full names (converts middle names to initials)
+const fullName1 = sanitize.fullName('aaron spurlock');  // Returns: 'Aaron Spurlock'
+const fullName2 = sanitize.fullName('aaron jennings spurlock');  // Returns: 'Aaron J Spurlock'
+const fullName3 = sanitize.fullName('mr. aaron patrick jennings spurlock jr.');  // Returns: 'Aaron PJ Spurlock'
 
 // Sanitize a phone number
 const phone = sanitize.phone('(123) 456-7890');  // Returns: '1234567890'
@@ -34,10 +44,30 @@ const invalidZip = sanitize.zip('12345-6789');  // Returns: null
 
 ## API
 
-### sanitize.name(name: string): string
+### sanitize.firstName(first_name: string): string
 
-Capitalizes the first letter of each word in a name and trims excess whitespace.
-Returns 'Unknown' if the input is empty or only whitespace.
+Sanitizes a first name by:
+- Removing titles (Mr., Mrs., Dr., etc.)
+- Converting multiple names to use "&" (e.g., "Bob and Jim" → "Bob & Jim")
+- Applying proper capitalization
+- Returns 'Unknown' if input is empty or only whitespace
+
+### sanitize.lastName(last_name: string): string
+
+Sanitizes a last name by:
+- Removing suffixes (Jr., Sr., Esq.)
+- Converting multiple names to use "&" (e.g., "Thompson and Wilson" → "Thompson & Wilson")
+- Applying proper capitalization
+- Returns 'Unknown' if input is empty or only whitespace
+
+### sanitize.fullName(full_name: string): string
+
+Sanitizes a full name by:
+- Removing titles and suffixes
+- Converting all middle names to initials (e.g., "Aaron Patrick Jennings Spurlock" → "Aaron PJ Spurlock")
+- Preserving first and last names in full
+- Applying proper capitalization
+- Returns 'Unknown' if input is empty or only whitespace
 
 ### sanitize.phone(phone: string): string | null
 

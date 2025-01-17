@@ -1,7 +1,7 @@
 {
   "name": "@div0ky/sanitize",
-  "version": "0.5.0",
-  "description": "Sanitize common fields for contacts.",
+  "version": "1.0.0",
+  "description": "Sanitize common fields for contacts, including first names, last names, and full names with support for multiple names, titles, and suffixes.",
   "license": "MIT",
   "author": "div0ky",
   "repository": {
