@@ -1,9 +1,13 @@
 {
   "name": "@div0ky/sanitize",
-  "version": "0.4.0",
+  "version": "0.5.0-Beta.1",
   "description": "Sanitize common fields for contacts.",
   "license": "MIT",
   "author": "div0ky",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/div0ky/sanitize"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
