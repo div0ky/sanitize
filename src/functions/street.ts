@@ -4,14 +4,24 @@ import { STREET_SUFFIXES, DIRECTIONS } from '../constants/address';
  * Sanitizes a street address following USPS standards where possible:
  * - Capitalizes first letter of each word except for standardized abbreviations
  * - Standardizes common street suffixes (St, Ave, etc.)
- * - Standardizes directionals (N, S, E, W, etc.)
+ * - Standardizes directionals (N, S, E, W, NE, SE, etc.)
  * - Removes invalid characters
  * - Handles unit/apartment numbers
+ * 
+ * @example
+ * sanitizeStreet("123 north main street") // returns "123 N Main St"
+ * sanitizeStreet("456 SE oak drive") // returns "456 SE Oak Dr"
+ * sanitizeStreet("789 northwest 1st avenue #2b") // returns "789 NW 1st Ave #2B"
  * 
  * @param address - The input street address string
  * @returns A sanitized street address string
  */
-export const sanitizeStreet = (address: string): string => {
+export const sanitizeStreet = (address: string | null | undefined): string => {
+    // Handle null, undefined, or non-string input
+    if (!address || typeof address !== 'string') {
+        return '';
+    }
+
     const trimmed = address.trim();
     if (!trimmed) return '';
 
@@ -24,6 +34,7 @@ export const sanitizeStreet = (address: string): string => {
     // Process each word
     const processedWords = words.map((word, index) => {
         const lowerWord = word.toLowerCase();
+        const upperWord = word.toUpperCase();
         
         // Check if it's a street suffix (typically at the end)
         if (STREET_SUFFIXES[lowerWord]) {
@@ -32,10 +43,12 @@ export const sanitizeStreet = (address: string): string => {
         
         // Check if it's a direction
         if (DIRECTIONS[lowerWord]) {
-            // If it's at the start or end, use abbreviation
-            if (index === 0 || index === words.length - 1) {
-                return DIRECTIONS[lowerWord];
-            }
+            return DIRECTIONS[lowerWord];
+        }
+        
+        // Check if it's already a directional abbreviation (SE, NW, etc.)
+        if (Object.values(DIRECTIONS).includes(upperWord)) {
+            return upperWord;
         }
         
         // Handle unit/apartment numbers

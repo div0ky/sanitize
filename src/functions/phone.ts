@@ -3,7 +3,12 @@
  * @param phone - The input phone number string
  * @returns A sanitized 10-digit phone number or null if invalid
  */
-export const sanitizePhone = (phone: string): string | null => {
+export const sanitizePhone = (phone: string | null | undefined): string | null => {
+    // Handle null, undefined, or non-string input
+    if (!phone || typeof phone !== 'string') {
+        return null;
+    }
+
     const trimmed = phone.trim();
     if (!trimmed) return null;
 

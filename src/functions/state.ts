@@ -5,7 +5,12 @@ import { VALID_STATES } from '../constants/states';
  * @param state - The input state string
  * @returns A sanitized state code or null if invalid
  */
-export const sanitizeState = (state: string): string | null => {
+export const sanitizeState = (state: string | null | undefined): string | null => {
+    // Handle null, undefined, or non-string input
+    if (!state || typeof state !== 'string') {
+        return null;
+    }
+
     const trimmed = state.trim().toUpperCase();
     if (!trimmed) return null;
 

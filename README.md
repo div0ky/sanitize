@@ -16,15 +16,25 @@ import { sanitize } from '@div0ky/sanitize';
 // Sanitize first names
 const firstName1 = sanitize.firstName('mr. john');  // Returns: 'John'
 const firstName2 = sanitize.firstName('bob and jim');  // Returns: 'Bob & Jim'
+const firstName3 = sanitize.firstName('jack and s.');  // Returns: 'Jack'
+const firstName4 = sanitize.firstName('j.d. smith');  // Returns: 'J D Smith'
 
 // Sanitize last names
 const lastName1 = sanitize.lastName('smith jr.');  // Returns: 'Smith'
 const lastName2 = sanitize.lastName('thompson and wilson');  // Returns: 'Thompson & Wilson'
+const lastName3 = sanitize.lastName('smith/jones');  // Returns: 'Smith/Jones'
+const lastName4 = sanitize.lastName('smith\\jones');  // Returns: 'Smith/Jones'
 
-// Sanitize full names (converts middle names to initials)
+// Example of compound first names with slash-separated last names
+const firstName = sanitize.firstName('jack and jill');  // Returns: 'Jack & Jill'
+const lastName = sanitize.lastName('smith/jones');  // Returns: 'Smith/Jones'
+
+// Sanitize full names (handles initials and middle names)
 const fullName1 = sanitize.fullName('aaron spurlock');  // Returns: 'Aaron Spurlock'
-const fullName2 = sanitize.fullName('aaron jennings spurlock');  // Returns: 'Aaron J Spurlock'
-const fullName3 = sanitize.fullName('mr. aaron patrick jennings spurlock jr.');  // Returns: 'Aaron PJ Spurlock'
+const fullName2 = sanitize.fullName('aaron j. spurlock');  // Returns: 'Aaron J Spurlock'
+const fullName3 = sanitize.fullName('j.r. bob smith');  // Returns: 'J R Bob Smith'
+const fullName4 = sanitize.fullName('mr. aaron patrick jennings spurlock jr.');  // Returns: 'Aaron PJ Spurlock'
+const fullName5 = sanitize.fullName('jack and s. thompson');  // Returns: 'Jack Thompson'
 
 // Sanitize a phone number
 const phone = sanitize.phone('(123) 456-7890');  // Returns: '1234567890'
@@ -49,6 +59,8 @@ const invalidZip = sanitize.zip('12345-6789');  // Returns: null
 Sanitizes a first name by:
 - Removing titles (Mr., Mrs., Dr., etc.)
 - Converting multiple names to use "&" (e.g., "Bob and Jim" → "Bob & Jim")
+- Removing short second names in compound names (e.g., "Jack and S." → "Jack")
+- Replacing periods with spaces in initials (e.g., "J.D." → "J D")
 - Applying proper capitalization
 - Returns 'Unknown' if input is empty or only whitespace
 
@@ -56,7 +68,8 @@ Sanitizes a first name by:
 
 Sanitizes a last name by:
 - Removing suffixes (Jr., Sr., Esq.)
-- Converting multiple names to use "&" (e.g., "Thompson and Wilson" → "Thompson & Wilson")
+- Handling slash-separated names as distinct last names (e.g., "Smith/Jones")
+- Converting "and" to "&" in compound names (e.g., "Thompson and Wilson" → "Thompson & Wilson")
 - Applying proper capitalization
 - Returns 'Unknown' if input is empty or only whitespace
 
@@ -64,8 +77,9 @@ Sanitizes a last name by:
 
 Sanitizes a full name by:
 - Removing titles and suffixes
-- Converting all middle names to initials (e.g., "Aaron Patrick Jennings Spurlock" → "Aaron PJ Spurlock")
-- Preserving first and last names in full
+- Preserving existing initials (e.g., "J.R. Smith" → "J R Smith")
+- Converting middle names to initials (e.g., "Aaron Patrick Jennings" → "Aaron PJ")
+- Removing short parts in compound names (e.g., "Jack and S. Thompson" → "Jack Thompson")
 - Applying proper capitalization
 - Returns 'Unknown' if input is empty or only whitespace
 

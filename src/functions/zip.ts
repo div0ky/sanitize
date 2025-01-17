@@ -3,7 +3,12 @@
  * @param zip - The input ZIP code string
  * @returns A sanitized 5-digit ZIP code or null if invalid
  */
-export const sanitizeZip = (zip: string): string | null => {
+export const sanitizeZip = (zip: string | null | undefined): string | null => {
+    // Handle null, undefined, or non-string input
+    if (!zip || typeof zip !== 'string') {
+        return null;
+    }
+
     const trimmed = zip.trim();
     if (!trimmed) return null;
 
