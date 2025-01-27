@@ -23,3 +23,24 @@ export const sanitizePhone = (phone: string | null | undefined): string | null =
     // Return the number if it's exactly 10 digits, otherwise null
     return sanitized.length === 10 ? sanitized : null;
 };
+
+
+/**
+ * Formats a sanitized 10-digit phone number into (XXX) XXX-XXXX format
+ * @param phone - A sanitized 10-digit phone number
+ * @returns Formatted phone number string or null if input is invalid
+ */
+export const formatPhone = (phone: string | null | undefined): string | null => {
+    // Handle null, undefined, or non-string input
+    if (!phone || typeof phone !== 'string') {
+        return null;
+    }
+
+    // Ensure the input is exactly 10 digits
+    if (!/^\d{10}$/.test(phone)) {
+        return null;
+    }
+
+    // Format as (XXX) XXX-XXXX
+    return `(${phone.slice(0, 3)}) ${phone.slice(3, 6)}-${phone.slice(6)}`;
+};

@@ -11,7 +11,7 @@ npm install @div0ky/sanitize
 ## Usage
 
 ```typescript
-import { sanitize } from '@div0ky/sanitize';
+import { sanitize, format } from '@div0ky/sanitize';
 
 // Sanitize first names
 const firstName1 = sanitize.firstName('mr. john');  // Returns: 'John'
@@ -39,6 +39,11 @@ const fullName5 = sanitize.fullName('jack and s. thompson');  // Returns: 'Jack 
 // Sanitize a phone number
 const phone = sanitize.phone('(123) 456-7890');  // Returns: '1234567890'
 
+// Sanitize and format a phone number
+const rawPhone = '(123) 456-7890';
+const sanitizedPhone = sanitize.phone(rawPhone);  // Returns: '1234567890'
+const formattedPhone = format.phone(sanitizedPhone);  // Returns: '(123) 456-7890'
+
 // Sanitize an email
 const email = sanitize.email('User@Example.COM');  // Returns: 'user@example.com'
 
@@ -50,7 +55,6 @@ const city = sanitize.city('new york');  // Returns: 'New York'
 const state = sanitize.state('ny');  // Returns: 'NY'
 const zip = sanitize.zip('12345');  // Returns: '12345'
 const invalidZip = sanitize.zip('12345-6789');  // Returns: null
-```
 
 ## API
 
@@ -126,6 +130,11 @@ Supports all 50 US states, DC, and US territories (PR, VI, AS, GU, MP).
 
 Sanitizes ZIP codes by ensuring they're exactly 5 digits.
 Returns `null` if the input doesn't contain exactly 5 digits after removing non-numeric characters.
+
+### format.phone(phone: string): string
+
+Formats a sanitized phone number into a human-readable format.
+Returns a string in the format '(XXX) XXX-XXXX'.
 
 ## License
 

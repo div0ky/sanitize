@@ -10,10 +10,12 @@ import {
     sanitizeZip
 } from './functions';
 
+import { formatPhone } from './functions/phone';
+
 /**
  * A collection of utility functions for sanitizing common contact-related fields
  */
-export const sanitize = {
+const sanitize = {
     firstName: sanitizeFirstName,
     lastName: sanitizeLastName,
     fullName: sanitizeFullName,
@@ -24,3 +26,9 @@ export const sanitize = {
     state: sanitizeState,
     zip: sanitizeZip
 };
+
+const format = {
+    phone: formatPhone
+}
+
+export { sanitize, format }
